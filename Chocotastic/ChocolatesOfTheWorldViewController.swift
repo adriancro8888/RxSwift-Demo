@@ -42,7 +42,7 @@ class ChocolatesOfTheWorldViewController: UIViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    updateCartButton()
+    
   }
   
   //MARK: Rx Setup
@@ -53,11 +53,9 @@ class ChocolatesOfTheWorldViewController: UIViewController {
       })
       .addDisposableTo(disposeBag)
   }
-  //MARK: Imperative methods
   
-  func updateCartButton() {
-    cartButton.title = "\(ShoppingCart.sharedCart.chocolates.value.count) 🍫"
-  }
+  
+ 
 }
 
 // MARK: - Table view data source
@@ -96,7 +94,7 @@ extension ChocolatesOfTheWorldViewController: UITableViewDelegate {
     
     let chocolate = europeanChocolates[indexPath.row]
     ShoppingCart.sharedCart.chocolates.value.append(chocolate)
-    updateCartButton()
+    
   }
 }
 
