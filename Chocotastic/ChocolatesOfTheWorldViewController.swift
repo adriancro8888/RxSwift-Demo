@@ -40,6 +40,7 @@ class ChocolatesOfTheWorldViewController: UIViewController {
     setupCartObserver()
     
     setupCellConfiguration()
+    setupCellTapHandling()
   }
   
   
@@ -53,13 +54,26 @@ class ChocolatesOfTheWorldViewController: UIViewController {
   }
   private func setupCellConfiguration(){
     europeanChocolates
-    .bindTo(tableView
-    .rx
-      .items(cellIdentifier: ChocolateCell.Identifier, cellType: ChocolateCell.self)){
-        row, chocolate, cell in
-        cell.configureWithChocolate(chocolate: chocolate)
-    }
-    .addDisposableTo(disposeBag)
+      .bindTo(tableView
+        .rx
+        .items(cellIdentifier: ChocolateCell.Identifier, cellType: ChocolateCell.self)){
+          row, chocolate, cell in
+          cell.configureWithChocolate(chocolate: chocolate)
+      }
+      .addDisposableTo(disposeBag)
+    
+  }
+  private func setupCellTapHandling(){
+    tableView
+      .rx
+      .modelSelected(Chocolate.self)
+      .subscribe(onNext: { (chocolate) in
+        ShoppingCart.sharedCart.chocolates.value.append(chocolate)
+        if let selectedRowIndexPath = self.tableView.indexPathForSelectedRow{
+          self.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
+        }
+      })
+      .addDisposableTo(disposeBag)
     
   }
   
